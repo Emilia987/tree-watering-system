@@ -3,7 +3,7 @@ import time
 
 # Define sensor type and pin number
 sensor = Adafruit_DHT.DHT11
-pin = 16
+pin = 26
 
 # Define number of readings
 num_readings = 10
