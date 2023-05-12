@@ -1,34 +1,32 @@
-import RPi.GPIO as GPIO
-import dht11
+import Adafruit_DHT
 import time
+import RPi.GPIO as GPIO
 
-# initialize GPIO
+GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
 
-# initialize soil moisture sensor
-moisture_pin = 15
-GPIO.setup(moisture_pin, GPIO.IN)
+# Set up the soil moisture sensor on pin 15
+GPIO.setup(15, GPIO.IN)
 
-# initialize temperature and humidity sensor
-dht11_pin = 16
-dht11_instance = dht11.DHT11(pin=dht11_pin)
+# Set up the DHT11 temperature and humidity sensor on pin 16
+DHT_SENSOR = Adafruit_DHT.DHT11
+DHT_PIN = 16
 
-# read sensors
+# Read data from both sensors 10 times
 for i in range(10):
-    # read soil moisture sensor
-    moisture_value = GPIO.input(moisture_pin)
-    print("Soil moisture:", moisture_value)
+    # Read soil moisture sensor data
+    soil_moisture = GPIO.input(15)
+    
+    # Read DHT11 temperature and humidity data
+    humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
-    # read DHT11 sensor
-    dht11_result = dht11_instance.read()
-    if dht11_result.is_valid():
-        temperature = dht11_result.temperature
-        humidity = dht11_result.humidity
-        print("Temperature: %d C" % temperature)
-        print("Humidity: %d %%" % humidity)
+    # Print data to console
+    print("Soil moisture: ", soil_moisture)
+    print("Temperature: ", temperature)
+    print("Humidity: ", humidity)
+    
+    # Delay for 2 seconds to allow sensors to stabilize
+    time.sleep(2)
 
-    time.sleep(1)
-
-# cleanup GPIO
+# Clean up GPIO pins
 GPIO.cleanup()
