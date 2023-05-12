@@ -3,7 +3,7 @@ import time
 
 # Define sensor type and pin number
 sensor = Adafruit_DHT.DHT11
-pin = 26
+pin = 32
 
 # Try to read the sensor
 humidity, temperature = Adafruit_DHT.read(sensor, pin)
